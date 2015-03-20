@@ -40,7 +40,6 @@ public class HashtagMapper extends
 		
 		for(String word : words){
 			if(word.startsWith("#") == false){
-				System.out.println(word);
 				context.write(new Text(word), countMap);
 			}
 		}

@@ -17,18 +17,17 @@ public class Driver {
 		String input = parser.get("input");
 		String output = parser.get("output");
 		String tmpdir = parser.get("tmpdir");
-/*
-		getJobFeatureVector(input, tmpdir + "/job_feature_vector");
-
-		String jobFeatureVector = loadJobFeatureVector(tmpdir
-				+ "/job_feature_vector");
-
-		System.out.println("Job feature vector: " + jobFeatureVector);
-*/
+		/*
+		 * getJobFeatureVector(input, tmpdir + "/job_feature_vector");
+		 * 
+		 * String jobFeatureVector = loadJobFeatureVector(tmpdir +
+		 * "/job_feature_vector");
+		 * 
+		 * System.out.println("Job feature vector: " + jobFeatureVector);
+		 */
 		getHashtagFeatureVector(input, tmpdir + "/feature_vector");
 
-	//	getHashtagSimilarities(jobFeatureVector, tmpdir + "/feature_vector",
-	//			output);
+		getHashtagSimilarities(null, tmpdir + "/feature_vector", output);
 	}
 
 	/**
@@ -110,12 +109,12 @@ public class Driver {
 			ClassNotFoundException, InterruptedException {
 		// Share the feature vector of #job to all mappers.
 		Configuration conf = new Configuration();
-		conf.set("jobFeatureVector", jobFeatureVector);
-		
+		// conf.set("jobFeatureVector", jobFeatureVector);
+
 		Optimizedjob job = new Optimizedjob(conf, input, output,
-				"Get similarities between #job and all other hashtags");
-		job.setClasses(SimilarityMapper.class, null, null);
-		job.setMapOutputClasses(IntWritable.class, Text.class);
+				"Get similarities between  all pairs of hashtags");
+		job.setClasses(SimilarityMapper.class, SimilarityReducer.class, null);
+		job.setMapOutputClasses(Text.class, IntWritable.class);
 		job.run();
 	}
 }

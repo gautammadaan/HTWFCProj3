@@ -7,26 +7,18 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class SimilarityReducer extends Reducer<Text, Text, Text, IntWritable> {
-
-	Map<String, Map<String, Integer>> tagWordCount = new HashMap<String, Map<String, Integer>>();
+public class SimilarityReducer extends Reducer<Text, IntWritable, IntWritable, Text> {
 
 	@Override
-	protected void reduce(LongWritable key, Iterable<Text> value,
-			Context context)
-			throws IOException, InterruptedException {		
-	
-		// Map<String, Integer> counts = new HashMap<String, Integer>();
+	protected void reduce(Text key, Iterable<IntWritable> value,
+			Context context) throws IOException, InterruptedException {
+
 		Integer count = 0;
-		for (Text word : value) {
-			String w = word.toString();
-			count = count + Integer.parseInt(w);
+		for (IntWritable val : value) {
+			count = count + val.get();
 		}
 
-		context.write(key, new IntWritable(count));
-		
-		// StringBuilder builder = new StringBuilder();
-		// for (Map.Entry<String, Integer> e : counts.entrySet()) 
-			// builder.append(e.getKey() + ":" + e.getValue() + ";");
-	}	
+		context.write(new IntWritable(count), key );
+
+	}
 }
