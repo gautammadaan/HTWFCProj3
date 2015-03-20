@@ -110,10 +110,11 @@ public class Driver {
 		// Share the feature vector of #job to all mappers.
 		Configuration conf = new Configuration();
 		// conf.set("jobFeatureVector", jobFeatureVector);
+		conf.setInt("mapred.max.split.size",500680);
 
 		Optimizedjob job = new Optimizedjob(conf, input, output,
 				"Get similarities between  all pairs of hashtags");
-		job.setClasses(SimilarityMapper.class, SimilarityReducer.class, null);
+		job.setClasses(SimilarityMapper.class, SimilarityReducer.class, SimilarityCombiner.class);
 		job.setMapOutputClasses(Text.class, IntWritable.class);
 		job.run();
 	}

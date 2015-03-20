@@ -7,8 +7,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
-public class SimilarityReducer extends
-		Reducer<Text, IntWritable, IntWritable, Text> {
+public class SimilarityCombiner extends
+		Reducer<Text, IntWritable, Text, IntWritable> {
 	IntWritable intWritable = new IntWritable();
 
 	@Override
@@ -20,7 +20,7 @@ public class SimilarityReducer extends
 			count = count + val.get();
 		}
 		intWritable.set(count);
-		context.write(intWritable, key);
+		context.write(key, intWritable);
 
 	}
 }

@@ -10,14 +10,15 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 public class HashtagMapper extends
 		Mapper<LongWritable, Text, Text, MapWritable> {
-
+	
+	MapWritable countMap = new MapWritable();
 	@Override
 	protected void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
 		String line = value.toString();
 		String[] words = Tokenizer.tokenize(line);
 
-		MapWritable countMap = new MapWritable();
+		countMap.clear();
 
 		/*
 		 * Iterate all words, find out all hashtags, then iterate all other
