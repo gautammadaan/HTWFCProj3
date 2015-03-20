@@ -7,6 +7,7 @@ import mapred.util.SimpleParser;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.*;
 
 public class Driver {
 
@@ -16,18 +17,18 @@ public class Driver {
 		String input = parser.get("input");
 		String output = parser.get("output");
 		String tmpdir = parser.get("tmpdir");
-
+/*
 		getJobFeatureVector(input, tmpdir + "/job_feature_vector");
 
 		String jobFeatureVector = loadJobFeatureVector(tmpdir
 				+ "/job_feature_vector");
 
 		System.out.println("Job feature vector: " + jobFeatureVector);
-
+*/
 		getHashtagFeatureVector(input, tmpdir + "/feature_vector");
 
-		getHashtagSimilarities(jobFeatureVector, tmpdir + "/feature_vector",
-				output);
+	//	getHashtagSimilarities(jobFeatureVector, tmpdir + "/feature_vector",
+	//			output);
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class Driver {
 		Optimizedjob job = new Optimizedjob(new Configuration(), input, output,
 				"Get feature vector for all hashtags");
 		job.setClasses(HashtagMapper.class, HashtagReducer.class, null);
-		job.setMapOutputClasses(Text.class, Text.class);
+		job.setMapOutputClasses(Text.class, MapWritable.class);
 		job.run();
 	}
 

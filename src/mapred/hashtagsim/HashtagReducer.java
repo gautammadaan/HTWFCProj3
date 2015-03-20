@@ -5,33 +5,40 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.io.*;
 
-public class HashtagReducer extends Reducer<Text, Text, Text, Text> {
+public class HashtagReducer extends Reducer<Text, MapWritable, Text, Text> {
 
 	@Override
-	protected void reduce(Text key, Iterable<Text> value,
-			Context context)
-			throws IOException, InterruptedException {		
-		
+	protected void reduce(Text key, Iterable<MapWritable> value, Context context)
+			throws IOException, InterruptedException {
+
 		Map<String, Integer> counts = new HashMap<String, Integer>();
-		for (Text word : value) {
-			String w = word.toString();
-			Integer count = counts.get(w);
-			if (count == null)
-				count = 0;
-			count++;
-			counts.put(w, count);
+
+		for (MapWritable countMap : value) {
+			for (Writable k : countMap.keySet()) {
+				String word = ((Text) k).toString();
+				if (counts.containsKey(word)) {
+					int count = counts.get(word);
+					count++;
+					counts.put(word, count);
+				} else {
+					counts.put(word, 1);
+				}
+			}
 		}
-		
+
 		/*
-		 * We're serializing the word cooccurrence count as a string of the following form:
-		 * 
-		 * word1:count1;word2:count2;...;wordN:countN;
+		 * We have changed the output from: Hashtag
+		 * feature1:count1;feature2:count2;...to feature
+		 * hashtag1:count1;hashtag2:count2;....
 		 */
+		if(counts.size()>1){
 		StringBuilder builder = new StringBuilder();
-		for (Map.Entry<String, Integer> e : counts.entrySet()) 
+		for (Map.Entry<String, Integer> e : counts.entrySet())
 			builder.append(e.getKey() + ":" + e.getValue() + ";");
-		
+
 		context.write(key, new Text(builder.toString()));
+		}
 	}
 }
