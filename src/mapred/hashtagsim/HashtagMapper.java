@@ -10,8 +10,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 public class HashtagMapper extends
 		Mapper<LongWritable, Text, Text, MapWritable> {
-	
+
 	MapWritable countMap = new MapWritable();
+
 	@Override
 	protected void map(LongWritable key, Text value, Context context)
 			throws IOException, InterruptedException {
@@ -26,7 +27,7 @@ public class HashtagMapper extends
 		 */
 		for (String word : words) {
 			if (word.startsWith("#")) {
-				
+
 				Text wordText = new Text(word);
 				if (countMap.containsKey(word)) {
 					IntWritable count = (IntWritable) countMap.get(wordText);
@@ -37,13 +38,13 @@ public class HashtagMapper extends
 				}
 			}
 		}
-		if(countMap.size()!=0){
-		
-		for(String word : words){
-			if(word.startsWith("#") == false){
-				context.write(new Text(word), countMap);
+		if (countMap.size() != 0) {
+
+			for (String word : words) {
+				if (word.startsWith("#") == false) {
+					context.write(new Text(word), countMap);
+				}
 			}
-		}
 		}
 
 	}

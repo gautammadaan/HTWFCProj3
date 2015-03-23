@@ -33,12 +33,12 @@ public class HashtagReducer extends Reducer<Text, MapWritable, Text, Text> {
 		 * feature1:count1;feature2:count2;...to feature
 		 * hashtag1:count1;hashtag2:count2;....
 		 */
-		if(counts.size()>1){
-		StringBuilder builder = new StringBuilder();
-		for (Map.Entry<String, Integer> e : counts.entrySet())
-			builder.append(e.getKey() + ":" + e.getValue() + ";");
+		if (counts.size() > 1) {
+			StringBuilder builder = new StringBuilder();
+			for (Map.Entry<String, Integer> e : counts.entrySet())
+				builder.append(e.getKey() + ":" + e.getValue() + ";");
 
-		context.write(key, new Text(builder.toString()));
+			context.write(key, new Text(builder.toString()));
 		}
 	}
 }
