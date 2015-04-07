@@ -17,14 +17,7 @@ public class Driver {
 		String input = parser.get("input");
 		String output = parser.get("output");
 		String tmpdir = parser.get("tmpdir");
-		/*
-		 * getJobFeatureVector(input, tmpdir + "/job_feature_vector");
-		 * 
-		 * String jobFeatureVector = loadJobFeatureVector(tmpdir +
-		 * "/job_feature_vector");
-		 * 
-		 * System.out.println("Job feature vector: " + jobFeatureVector);
-		 */
+		
 		getHashtagFeatureVector(input, tmpdir + "/feature_vector");
 
 		getHashtagSimilarities(null, tmpdir + "/feature_vector", output);
@@ -107,12 +100,12 @@ public class Driver {
 	private static void getHashtagSimilarities(String jobFeatureVector,
 			String input, String output) throws IOException,
 			ClassNotFoundException, InterruptedException {
-		// Share the feature vector of #job to all mappers.
 		Configuration conf = new Configuration();
-		// conf.set("jobFeatureVector", jobFeatureVector);
-		
+		//Configure Split size for proper parallelization
+		conf.setInt("mapred.max.split.size",250680);
 		Optimizedjob job = new Optimizedjob(conf, input, output,
 				"Get similarities between  all pairs of hashtags");
+		//Add a combiner
 		job.setClasses(SimilarityMapper.class, SimilarityReducer.class, SimilarityCombiner.class);
 		job.setMapOutputClasses(Text.class, IntWritable.class);
 		

@@ -39,6 +39,7 @@ public class SimilarityMapper extends
 			for (int j = i + 1; j < count.length; j++) {
 				builder.setLength(0);
 				int val = count[i] * count[j];
+				// Add a comparision to avoid pairs like (#a #b) & (#b #a)
 				if (hashTag[i].compareTo(hashTag[j]) < 0) {
 					builder.append(hashTag[i]);
 					builder.append("\t");

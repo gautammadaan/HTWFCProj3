@@ -7,6 +7,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.mapreduce.Reducer;
 
+//A Combiner to reduce the time taken for shuffle and sort stage
 public class SimilarityCombiner extends
 		Reducer<Text, IntWritable, Text, IntWritable> {
 	IntWritable intWritable = new IntWritable();

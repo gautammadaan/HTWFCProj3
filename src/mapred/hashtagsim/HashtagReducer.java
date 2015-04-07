@@ -18,12 +18,13 @@ public class HashtagReducer extends Reducer<Text, MapWritable, Text, Text> {
 		for (MapWritable countMap : value) {
 			for (Writable k : countMap.keySet()) {
 				String word = ((Text) k).toString();
+				int n = ((IntWritable) countMap.get(k)).get();
 				if (counts.containsKey(word)) {
 					int count = counts.get(word);
-					count++;
+					count += n;
 					counts.put(word, count);
 				} else {
-					counts.put(word, 1);
+					counts.put(word, n);
 				}
 			}
 		}

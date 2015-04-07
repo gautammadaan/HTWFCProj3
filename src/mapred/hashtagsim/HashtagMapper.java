@@ -29,9 +29,9 @@ public class HashtagMapper extends
 			if (word.startsWith("#")) {
 
 				Text wordText = new Text(word);
-				if (countMap.containsKey(word)) {
+				if (countMap.containsKey(wordText)) {
 					IntWritable count = (IntWritable) countMap.get(wordText);
-					// Increment the count of the occurence
+					System.out.println(count.get());
 					count.set(count.get() + 1);
 				} else {
 					countMap.put(wordText, new IntWritable(1));
@@ -39,7 +39,6 @@ public class HashtagMapper extends
 			}
 		}
 		if (countMap.size() != 0) {
-
 			for (String word : words) {
 				if (word.startsWith("#") == false) {
 					context.write(new Text(word), countMap);
